@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DFMEA Evaluation Tool</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f2f4f7;
+        padding: 30px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .sessionBox {
+        border: 2px solid #333;
+        background: #d9d9d9;
+        padding: 15px;
+        margin-bottom: 25px;
+        width: 80%;
+        margin: auto;
+    }
+
+    .sessionTitle {
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .sessionRow {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+    .sessionLeft { width: 50%; }
+    .sessionRight { width: 45%; }
+
+    .field {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .sessionLeft label {
+        width: 180px;
+        font-weight: bold;
+    }
+
+    .sessionRight label {
+        width: 150px;
+        font-weight: bold;
+    }
+
+    .sessionLeft input,
+    .sessionLeft select,
+    .sessionRight input {
+        flex: 1;
+        padding: 5px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 80%;
+        background: white;
+        margin: 30px auto;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background: #34495e;
+        color: white;
+    }
+
+    .section {
+        background: #ecf0f1;
+        font-weight: bold;
+    }
+
+    .sectionHeader {
+        background: #ecf0f1;
+        font-weight: bold;
+        font-size: 18px;
+        text-align: left;
+        padding-left: 12px;
+    }
+
+    .sectionScore {
+        background: #ecf0f1;
+        font-weight: bold;
+    }
+
+    .titleBox {
+        width: 85%;
+        margin: auto;
+        margin-bottom: 30px;
+        padding: 25px;
+        text-align: center;
+        background: linear-gradient(135deg, #dee276, #e48841);
+        color: rgb(17, 16, 16);
+        border-radius: 12px;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+
+    .titleBox h1 {
+        margin: 0;
+        font-size: 36px;
+        letter-spacing: 1px;
+        font-weight: 700;
+    }
+
+    textarea {
+        width: 100%;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    button {
+        padding: 10px 20px;
+        background: #2c3e50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin: 10px;
+    }
+
+    button:hover {
+        background: #1a252f;
+    }
+
+    .momButton {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background: #2a0472;
+        border-radius: 6px;
+        z-index: 1000;
+    }
+
+    #momPage {
+        display: none;
+    }
+
+    .editorToolbar {
+        background: #ddd;
+        padding: 8px;
+        border: 1px solid #aaa;
+        width: 80%;
+        margin: auto;
+    }
+
+    .editorToolbar button,
+    .editorToolbar select,
+    .editorToolbar input {
+        margin-right: 5px;
+    }
+
+    .editor {
+        border: 1px solid #aaa;
+        height: 650px;
+        padding: 10px;
+        background: white;
+        overflow: auto;
+        width: 80%;
+        margin: auto;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div id="dfmeaPage">
+    <div class="titleBox">
+        <h1>DFMEA Evaluation Tool</h1>
+    </div>
+
+    <div class="sessionBox">
+        <div class="sessionTitle">Session Details</div>
+        <div class="sessionRow">
+            <div class="sessionLeft">
+                <div class="field"><label>Date</label><input type="date"></div>
+                <div class="field">
+                    <label>DFMEA Type</label>
+                    <select>
+                        <option>Interface / System DFMEA</option>
+                        <option>Component DFMEA</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Brand</label>
+                    <select>
+                        <option>Pulsar</option>
+                        <option>KTM</option>
+                        <option>Triumph</option>
+                        <option>Commuter</option>
+                        <option>CV ICE</option>
+                        <option>2W EV</option>
+                        <option>CV EV</option>
+                    </select>
+                </div>
+                <div class="field"><label>Model</label><input type="text"></div>
+                <div class="field"><label>SOP Date</label><input type="date"></div>
+                <div class="field">
+                    <label>Project Stage</label>
+                    <select>
+                        <option>Before Tooling Release</option>
+                        <option>After Tooling Release</option>
+                    </select>
+                </div>
+                <div class="field"><label>Component Name</label><input type="text"></div>
+                <div class="field"><label>DFMEA Revision</label><input type="text"></div>
+            </div>
+
+            <div class="sessionRight">
+                <b>Required CFT Members</b><br><br>
+                <div class="field"><label>Design Team</label><input type="text"></div>
+                <div class="field"><label>Integration Team</label><input type="text"></div>
+                <div class="field"><label>QM/DQE</label><input type="text"></div>
+                <div class="field"><label>T&V Team</label><input type="text"></div>
+                <div class="field"><label>PQA/CQA</label><input type="text"></div>
+                <div class="field"><label>Vendor Team</label><input type="text"></div>
+            </div>
+        </div>
+    </div>
+
+    <h2>CFT Participation Score</h2>
+    <table>
+        <tr>
+            <th rowspan="2">Team Members</th>
+            <th colspan="4">Experience</th>
+            <th rowspan="2">Additional Member</th>
+            <th rowspan="2">Score</th>
+            <th rowspan="2">Remarks</th>
+        </tr>
+        <tr>
+            <th>>10</th>
+            <th>05-10</th>
+            <th>02-05</th>
+            <th>&lt;2</th>
+        </tr>
+        <tr>
+            <td>Designer</td>
+            <td><input type="checkbox" name="designer_exp" value="0.30" onclick="expSelect('designer',this)"></td>
+            <td><input type="checkbox" name="designer_exp" value="0.25" onclick="expSelect('designer',this)"></td>
+            <td><input type="checkbox" name="designer_exp" value="0.20" onclick="expSelect('designer',this)"></td>
+            <td><input type="checkbox" name="designer_exp" value="0.15" onclick="expSelect('designer',this)"></td>
+            <td><input type="checkbox" id="designer_add" onclick="calcScore('designer')"></td>
+            <td id="designer_score">0</td>
+            <td><textarea></textarea></td>
+        </tr>
+        <tr>
+            <td>VI</td>
+            <td><input type="checkbox" name="vi_exp" value="0.30" onclick="expSelect('vi',this)"></td>
+            <td><input type="checkbox" name="vi_exp" value="0.25" onclick="expSelect('vi',this)"></td>
+            <td><input type="checkbox" name="vi_exp" value="0.20" onclick="expSelect('vi',this)"></td>
+            <td><input type="checkbox" name="vi_exp" value="0.15" onclick="expSelect('vi',this)"></td>
+            <td><input type="checkbox" id="vi_add" onclick="calcScore('vi')"></td>
+            <td id="vi_score">0</td>
+            <td><textarea></textarea></td>
+        </tr>
+        <tr>
+            <td>QM / DQE</td>
+            <td><input type="checkbox" name="qm_exp" value="0.30" onclick="expSelect('qm',this)"></td>
+            <td><input type="checkbox" name="qm_exp" value="0.25" onclick="expSelect('qm',this)"></td>
+            <td><input type="checkbox" name="qm_exp" value="0.20" onclick="expSelect('qm',this)"></td>
+            <td><input type="checkbox" name="qm_exp" value="0.15" onclick="expSelect('qm',this)"></td>
+            <td><input type="checkbox" id="qm_add" onclick="calcScore('qm')"></td>
+            <td id="qm_score">0</td>
+            <td><textarea></textarea></td>
+        </tr>
+        <tr>
+            <td>T&V</td>
+            <td><input type="checkbox" name="tv_exp" value="0.30" onclick="expSelect('tv',this)"></td>
+            <td><input type="checkbox" name="tv_exp" value="0.25" onclick="expSelect('tv',this)"></td>
+            <td><input type="checkbox" name="tv_exp" value="0.20" onclick="expSelect('tv',this)"></td>
+            <td><input type="checkbox" name="tv_exp" value="0.15" onclick="expSelect('tv',this)"></td>
+            <td><input type="checkbox" id="tv_add" onclick="calcScore('tv')"></td>
+            <td id="tv_score">0</td>
+            <td><textarea></textarea></td>
+        </tr>
+        <tr class="section">
+            <td colspan="6">Score (25% Weightage)</td>
+            <td id="team_total">0</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <h2>BAL Evaluation</h2>
+    <table>
+        <tr class="section">
+            <td class="sectionHeader">Structural Completeness</td>
+            <td id="structural_total" class="sectionScore">0</td>
+            <td>10% Weightage</td>
+        </tr>
+        <tr>
+            <td>Change Layout / Details</td>
+            <td><select class="structural" onchange="calcSection()">
+                <option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option>
+            </select></td>
+            <td rowspan="5"><textarea style="width:100%;height:120px;"></textarea></td>
+        </tr>
+        <tr><td>Boundary Diagram</td><td><select class="structural" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>Parameter Diagram</td><td><select class="structural" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>Block Diagram</td><td><select class="structural" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>DFMEA Main Sheet</td><td><select class="structural" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+
+        <tr class="section">
+            <td class="sectionHeader">Technical Coverage</td>
+            <td id="technical_total" class="sectionScore">0</td>
+            <td>25% Weightage</td>
+        </tr>
+        <tr>
+            <td>Functional Impact of Design Change Covered</td>
+            <td><select class="technical" onchange="calcSection()">
+                <option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option>
+            </select></td>
+            <td rowspan="5"><textarea style="width:100%;height:120px;"></textarea></td>
+        </tr>
+        <tr><td>DVP (BAL & Vendor)</td><td><select class="technical" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>Soft Analysis (CAE, CFD, DMU)</td><td><select class="technical" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>Interface & Packaging Checks</td><td><select class="technical" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>Identification of Failure Modes Basis Change Content</td><td><select class="technical" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+
+        <tr class="section">
+            <td class="sectionHeader">Risk Robustness</td>
+            <td id="risk_total" class="sectionScore">0</td>
+            <td>15% Weightage</td>
+        </tr>
+        <tr>
+            <td>Occurence Number to be Reverified Basis Design Change</td>
+            <td><select class="risk" onchange="calcSection()">
+                <option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option>
+            </select></td>
+            <td rowspan="4"><textarea style="width:100%;height:100px;"></textarea></td>
+        </tr>
+        <tr><td>Dectection Number to be Reverified Basis Design Change</td><td><select class="risk" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>RPN Updation Basis Design Change</td><td><select class="risk" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>High Severity Items Should be Addressed in Design</td><td><select class="risk" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+
+        <tr class="section">
+            <td class="sectionHeader">Governance & Maturity</td>
+            <td id="governance_total" class="sectionScore">0</td>
+            <td>25% Weightage</td>
+        </tr>
+        <tr>
+            <td>Consideration of Internal Failures for Design Change</td>
+            <td><select class="governance" onchange="calcSection()">
+                <option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option>
+            </select></td>
+            <td rowspan="3"><textarea style="width:100%;height:90px;"></textarea></td>
+        </tr>
+        <tr><td>DRBFM Cognizance & Gaps if Any</td><td><select class="governance" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+        <tr><td>Consideration of Latest External (Field) failures for Design Change</td><td><select class="governance" onchange="calcSection()"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></td></tr>
+
+        <tr class="section">
+            <td>FINAL DFMEA SCORE</td>
+            <td colspan="2" id="final_score">0</td>
+        </tr>
+    </table>
+    <button onclick="download_excel()">Download Excel</button>
+</div>
+
+<div id="momPage">
+    <h2>Minutes of Meeting</h2>
+    <div class="editorToolbar">
+        <select onchange="format('fontName',this.value)">
+            <option value="Arial">Arial</option>
+            <option value="Calibri">Calibri</option>
+            <option value="Times New Roman">Times New Roman</option>
+        </select>
+
+        <select onchange="format('fontSize',this.value)">
+            <option value="1">10</option>
+            <option value="2">12</option>
+            <option value="3">14</option>
+            <option value="4">18</option>
+            <option value="5">24</option>
+        </select>
+
+        <button onclick="format('bold')"><b>B</b></button>
+        <button onclick="format('italic')"><i>I</i></button>
+        <button onclick="format('underline')"><u>U</u></button>
+        <input type="color" onchange="format('foreColor',this.value)">
+        <button onclick="format('justifyLeft')">Left</button>
+        <button onclick="format('justifyCenter')">Center</button>
+        <button onclick="format('justifyRight')">Right</button>
+        <button onclick="format('insertUnorderedList')">• List</button>
+        <button onclick="format('insertOrderedList')">1. List</button>
+    </div>
+    <br>
+    <div class="editor" contenteditable="true">
+        Type technical points here...
+    </div>
+    <br>
+    <div style="text-align:center">
+        <button onclick="backToDFMEA()">Back to DFMEA</button>
+    </div>
+</div>
+
+<button class="momButton" onclick="openMOM()">Minutes of Meeting</button>
+
+<script>
+const BASE = 15.625;
+
+let structuralScore = 0;
+let technicalScore = 0;
+let riskScore = 0;
+let governanceScore = 0;
+
+function expSelect(group, checkbox) {
+    let boxes = document.getElementsByName(group + "_exp");
+    boxes.forEach(b => { if (b !== checkbox) b.checked = false; });
+    calcScore(group);
+}
+
+function calcScore(group) {
+    let exp = document.getElementsByName(group + "_exp");
+    let add = document.getElementById(group + "_add");
+    let expWeight = 0;
+
+    exp.forEach(e => {
+        if (e.checked) expWeight = parseFloat(e.value);
+    });
+
+    if (expWeight == 0) {
+        add.checked = false;
+        add.disabled = true;
+    } else {
+        add.disabled = false;
+    }
+
+    let addWeight = add.checked ? 0.10 : 0;
+    let score = (expWeight + addWeight) * BASE;
+
+    document.getElementById(group + "_score").innerText = score.toFixed(2);
+    calcTotal();
+}
+
+function calcTotal() {
+    let groups = ["designer", "vi", "qm", "tv"];
+    let total = 0;
+    groups.forEach(g => {
+        total += parseFloat(document.getElementById(g + "_score").innerText);
+    });
+    document.getElementById("team_total").innerText = total.toFixed(2);
+    calcFinal();
+}
+
+function sectionScore(className, weight) {
+    let selects = document.querySelectorAll("." + className);
+    let sum = 0;
+    selects.forEach(s => {
+        sum += parseInt(s.value);
+    });
+    let avg = sum / selects.length;
+    return (avg / 5) * weight;
+}
+
+function calcSection() {
+    structuralScore = sectionScore("structural", 10);
+    technicalScore = sectionScore("technical", 25);
+    riskScore = sectionScore("risk", 15);
+    governanceScore = sectionScore("governance", 25);
+
+    document.getElementById("structural_total").innerText = structuralScore.toFixed(2);
+    document.getElementById("technical_total").innerText = technicalScore.toFixed(2);
+    document.getElementById("risk_total").innerText = riskScore.toFixed(2);
+    document.getElementById("governance_total").innerText = governanceScore.toFixed(2);
+
+    calcFinal();
+}
+
+function calcFinal() {
+    let team = parseFloat(document.getElementById("team_total").innerText) || 0;
+    let bal = structuralScore + technicalScore + riskScore + governanceScore;
+    let finalScore = team + bal;
+    let cell = document.getElementById("final_score");
+
+    cell.innerText = finalScore.toFixed(2);
+
+    if (finalScore > 85) {
+        cell.style.background = "green";
+        cell.style.color = "white";
+    } else if (finalScore >= 65) {
+        cell.style.background = "yellow";
+        cell.style.color = "black";
+    } else {
+        cell.style.background = "red";
+        cell.style.color = "white";
+    }
+}
+
+function openMOM() {
+    document.getElementById("dfmeaPage").style.display = "none";
+    document.getElementById("momPage").style.display = "block";
+    document.querySelector(".momButton").style.display = "none";
+    window.scrollTo(0, 0);
+}
+
+function backToDFMEA() {
+    document.getElementById("momPage").style.display = "none";
+    document.getElementById("dfmeaPage").style.display = "block";
+    document.querySelector(".momButton").style.display = "block";
+    window.scrollTo(0, 0);
+}
+
+function format(cmd, value = null) {
+    document.execCommand(cmd, false, value);
+}
+
+function download_excel(){
+
+// -------- SESSION DETAILS --------
+let date = document.querySelectorAll("input[type='date']")[0].value;
+let sop = document.querySelectorAll("input[type='date']")[1].value;
+
+let selects = document.querySelectorAll("select");
+let dfmeaType = selects[0].value;
+let brand = selects[1].value;
+let stage = selects[2].value;
+
+let inputs = document.querySelectorAll("input[type='text']");
+let model = inputs[0].value;
+let component = inputs[1].value;
+let revision = inputs[2].value;
+
+let designTeam = inputs[3].value;
+let integration = inputs[4].value;
+let qm = inputs[5].value;
+let tv = inputs[6].value;
+let pqa = inputs[7].value;
+let vendor = inputs[8].value;
+
+
+// -------- CFT SCORES --------
+let teamTotal = document.getElementById("team_total").innerText;
+
+
+// -------- BAL SCORES --------
+let structuralScore = document.getElementById("structural_total").innerText;
+let technicalScore = document.getElementById("technical_total").innerText;
+let riskScore = document.getElementById("risk_total").innerText;
+let governanceScore = document.getElementById("governance_total").innerText;
+let finalScore = document.getElementById("final_score").innerText;
+
+
+// -------- REMARKS --------
+let remarks = document.querySelectorAll("table textarea");
+
+let designerRemark = remarks[0].value;
+let viRemark = remarks[1].value;
+let qmRemark = remarks[2].value;
+let tvRemark = remarks[3].value;
+
+let structuralRemark = remarks[4]?.value || "";
+let technicalRemark = remarks[5]?.value || "";
+let riskRemark = remarks[6]?.value || "";
+let governanceRemark = remarks[7]?.value || "";
+
+
+// -------- MOM (KEEP FORMATTING) --------
+let momHTML = document.querySelector(".editor").innerHTML;
+
+
+// -------- EXCEL HTML --------
+let html = `
+<table style="border-collapse:collapse;font-family:Calibri;width:950px;border:2px solid black">
+
+<tr>
+<td colspan="6" style="border:2px solid black;background:#fff200;font-weight:bold;font-size:18px;text-align:center">
+DFMEA Evaluation Tool
+</td>
+</tr>
+
+<tr>
+<td colspan="6" style="border:2px solid black;font-weight:bold;text-align:center">
+SESSION DETAILS
+</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Date</td>
+<td style="border:2px solid black">${date}</td>
+<td style="border:2px solid black"></td>
+<td style="border:2px solid black;background:#c9d2e3">Design Team</td>
+<td colspan="2" style="border:2px solid black">${designTeam}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">DFMEA Type</td>
+<td style="border:2px solid black">${dfmeaType}</td>
+<td style="border:2px solid black"></td>
+<td style="border:2px solid black;background:#c9d2e3">Integration Team</td>
+<td colspan="2" style="border:2px solid black">${integration}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Brand</td>
+<td style="border:2px solid black">${brand}</td>
+<td style="border:2px solid black"></td>
+<td style="border:2px solid black;background:#c9d2e3">QM/DQE</td>
+<td colspan="2" style="border:2px solid black">${qm}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Model</td>
+<td style="border:2px solid black">${model}</td>
+<td style="border:2px solid black"></td>
+<td style="border:2px solid black;background:#c9d2e3">T&V Team</td>
+<td colspan="2" style="border:2px solid black">${tv}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">SOP Date</td>
+<td style="border:2px solid black">${sop}</td>
+<td style="border:2px solid black"></td>
+<td style="border:2px solid black;background:#c9d2e3">PQA/CQA</td>
+<td colspan="2" style="border:2px solid black">${pqa}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Project Stage</td>
+<td style="border:2px solid black">${stage}</td>
+<td style="border:2px solid black"></td>
+<td style="border:2px solid black;background:#c9d2e3">Vendor Team</td>
+<td colspan="2" style="border:2px solid black">${vendor}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Component Name</td>
+<td style="border:2px solid black">${component}</td>
+<td colspan="4" style="border:2px solid black"></td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">DFMEA Revision</td>
+<td style="border:2px solid black">${revision}</td>
+<td colspan="4" style="border:2px solid black"></td>
+</tr>
+
+<tr>
+<td colspan="6" style="border:2px solid black;background:#fff200;font-weight:bold;text-align:center">
+CFT PARTICIPATION SCORE
+</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;font-weight:bold;text-align:center">Team</td>
+<td colspan="5" style="border:2px solid black;font-weight:bold;text-align:center">
+Remarks
+</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Designer</td>
+<td colspan="5" style="border:2px solid black">${designerRemark}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">VI</td>
+<td colspan="5" style="border:2px solid black">${viRemark}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">QM / DQE</td>
+<td colspan="5" style="border:2px solid black">${qmRemark}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">T&V</td>
+<td colspan="5" style="border:2px solid black">${tvRemark}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;font-weight:bold">Total CFT Score</td>
+<td colspan="5" style="border:2px solid black;text-align:center">${teamTotal}</td>
+</tr>
+
+<tr>
+<td colspan="6" style="border:2px solid black;background:#fff200;font-weight:bold;text-align:center">
+BAL Evaluation
+</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;font-weight:bold">Parameter</td>
+<td style="border:2px solid black;font-weight:bold">Score</td>
+<td colspan="4" style="border:2px solid black;font-weight:bold">Remarks</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Structural Completeness</td>
+<td style="border:2px solid black;text-align:center">${structuralScore}</td>
+<td colspan="4" style="border:2px solid black">${structuralRemark}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Technical Coverage</td>
+<td style="border:2px solid black;text-align:center">${technicalScore}</td>
+<td colspan="4" style="border:2px solid black">${technicalRemark}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Risk Robustness</td>
+<td style="border:2px solid black;text-align:center">${riskScore}</td>
+<td colspan="4" style="border:2px solid black">${riskRemark}</td>
+</tr>
+
+<tr>
+<td style="border:2px solid black;background:#c9d2e3">Governance & Maturity</td>
+<td style="border:2px solid black;text-align:center">${governanceScore}</td>
+<td colspan="4" style="border:2px solid black">${governanceRemark}</td>
+</tr>
+
+<tr>
+<td colspan="3" style="border:2px solid black;background:#ead7a4;font-weight:bold">
+Final DFMEA Score
+</td>
+<td colspan="3" style="border:2px solid black;background:#ead7a4;text-align:center;font-weight:bold">
+${finalScore}
+</td>
+</tr>
+
+<tr>
+<td colspan="6" style="border:2px solid black;background:#fff200;font-weight:bold;text-align:center">
+Minutes of Meeting
+</td>
+</tr>
+
+<tr>
+<td colspan="6" style="border:2px solid black;height:200px;vertical-align:top">
+${momHTML}
+</td>
+</tr>
+
+</table>
+`;
+
+
+// -------- CREATE FILE --------
+let excelFile = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+${html}
+</body>
+</html>
+`;
+
+let blob = new Blob([excelFile], {type:"application/vnd.ms-excel"});
+
+let link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+link.download = "DFMEA_Evaluation_Report.xls";
+
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+
+}
+
+// Initialize calculations
+window.onload = calcSection;
+</script>
+
+</body>
+</html>
